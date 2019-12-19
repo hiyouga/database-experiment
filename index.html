@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="" />
+	<meta name="author" content="hoshi_hiyouga, hiyouga#buaa.edu.cn" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+
+	<title>演示博客</title>
+
+	<link rel="stylesheet" href="src/css/lib/bootstrap.min.css" />
+	<link rel="stylesheet" href="src/css/lib/jquery.fancybox.min.css" />
+	<link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="src/css/core.css" />
+</head>
+<body>
+	<header>
+		<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+			<div class="container">
+				<a id="blogtitle" class="navbar-brand mb-0 h1" href="?"></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active">
+							<a class="nav-link" href="?">主页</a>
+						</li>
+					</ul>
+					<div id="post-blog" class="mr-3">
+						<button type="button" id="postbtn" class="btn btn-sm btn-outline-light login-after" data-toggle="modal" data-target="#postModal">发布文章</button>
+					</div>
+					<span id="author" class="navbar-text"></span>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<main role="main" class="container">
+		<div id="blogcontainer" class="row mt-3 mb-4">
+			<div id="blog-main" class="col-md-8">
+				<!-- Main content -->
+				<div id="backbtn" class="p-2">
+					<button type="button" class="btn btn-outline-dark" onclick="gohome()">
+						<i class="fa fa-arrow-left"></i>
+						<span>返回</span>
+					</button>
+				</div>
+				<div id="blog-posts"></div><!-- /.blog-posts -->
+				<div id="blog-content" class="p-2">
+					<h3 id="blog-content-title" class="blog-title"></h3>
+					<p class="blog-meta">
+						<span id="blog-content-time"></span> by <span id="blog-content-author"></span>&nbsp;
+						<i class="fa fa-thumbs-o-up"></i>&nbsp;<span id="blog-content-likes"></span>
+						<i class="fa fa-thumbs-o-down"></i>&nbsp;<span id="blog-content-dislikes"></span>
+					</p>
+					<div id="blog-content-html"></div>
+					<div id="likebtns" class="login-after">
+						<div class="likediv">
+							<button id="likebtn" type="button" class="btn btn-outline-success" onclick="like()">
+								<i class="fa fa-thumbs-o-up"></i>&nbsp;赞
+							</button>
+						</div>
+						<div class="likediv">
+							<button id="dislikebtn" type="button" class="btn btn-outline-danger" onclick="dislike()">
+								<i class="fa fa-thumbs-o-down"></i>&nbsp;踩
+							</button>
+						</div>
+					</div>
+				</div><!-- /.blog-content -->
+				<div id="blog-comments" class="p-2">
+					<h4 class="font-italic">评论</h4><hr />
+					<div id="comments">
+					</div>
+					<form id="comment-form" class="login-after" onsubmit="return comment();">
+						<div class="form-group">
+							<textarea id="comment-text" class="form-control" rows="3" required></textarea>
+							<button id="comment-btn" type="submit" class="btn btn-outline-secondary btn-block">发布评论</button>
+							<div id="comment-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+								<span id="comment-warning"></span>
+								<button type="button" class="close" onclick="$('#comment-alert').fadeOut()">×</button>
+							</div>
+						</div>
+					</form>
+				</div><!-- /.blog-comments -->
+				<div id="mainloader" class="p-2">
+					<div class="loader--spinningDisc"></div>
+				</div>
+				<div id="pagination" class="m-3"><button id="loadmore" type="button" class="btn btn-outline-dark btn-lg btn-block" onclick="loadmore()">加载更多</button></div>
+			</div><!-- /.blog-main -->
+			<aside class="col-md-4 blog-sidebar">
+				<div class="p-3 mb-3 bg-light rounded">
+					<h4 class="font-italic">用户面板</h4>
+					<form id="unlogin" class="form-signin login-before" onsubmit="return false;">
+						<input type="text" id="inputUsername" class="form-control" placeholder="用户名" required />
+						<input type="password" id="inputPassword" class="form-control" placeholder="密码" required />
+						<div id="btn-group" class="btn-group btn-group-justified" role="group">
+							<button id="loginbtn" type="submit" class="btn btn-outline-dark" onclick="login()">登录</button>
+							<button id="regbtn" type="submit" class="btn btn-outline-dark" onclick="register()">注册</button>
+						</div>
+					</form>
+					<div id="loggedin" class="mb-0 login-after">
+						<p id="username"></p>
+						<button type="button" class="btn btn-outline-dark btn-block" onclick="logout()">登出</button>
+					</div>
+				</div>
+				<div class="p-3">
+					<h4 class="font-italic">文章列表</h4>
+					<div id="sideloader" class="p-2">
+						<div class="loader--audioWave"></div>
+					</div>
+					<ol id="side-list" class="list-unstyled mb-0"></ol>
+				</div>
+		    </aside><!-- /.blog-sidebar -->
+		</div><!-- /.row -->
+	</main><!-- /.container -->
+	<footer id="blogfooter" class="blog-footer">
+		<p>&copy;2019 BUAA CST DBMS Group. All Rights Resevered.</p>
+	</footer>
+	<div class="back-to-top">
+		<i class="fa fa-arrow-up"></i>
+		<span id="scrollpercent"><span>0</span>%</span>
+	</div>
+	<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModal" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<form onsubmit="return post();">
+					<div class="modal-header">
+						<h5 class="modal-title" id="postModalTitle">撰写文章</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="message-title" class="col-form-label">标题：</label>
+							<input type="text" class="form-control" id="post-title" required />
+						</div>
+						<div class="form-group">
+							<label for="message-content" class="col-form-label">内容：</label>
+							<textarea class="form-control" id="post-content" required></textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div id="post-warning"></div>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-primary">发布</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="tipsModal" tabindex="-1" role="dialog" aria-labelledby="tipsModal" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="tipsModalTitle">提示消息</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="tipsMessage" class="modal-body"></div>
+				<div class="modal-footer">
+					<button id="tipsbtn" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="">我知道了</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- JavaScript -->
+	<script defer="" async="true" data-main="src/js/main" src="src/js/lib/require.js"></script>
+</body>
+</html>
