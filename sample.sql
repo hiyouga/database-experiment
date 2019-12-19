@@ -43,7 +43,7 @@ ALTER TABLE `comments`
 
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`uid`,`aid`) USING BTREE,
-  ADD KEY `like_operator` (`aid`),
+  ADD KEY `like_operator` (`uid`),
   ADD KEY `like_article` (`aid`);
 
 ALTER TABLE `users`
