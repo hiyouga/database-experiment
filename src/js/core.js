@@ -253,6 +253,7 @@ function like() {
 					break;
 				case 2: // user not logged in
 					$("#tipsMessage").text("用户未登录");
+					$("#tipsbtn").attr("onclick", "logout()");
 					$("#tipsModal").modal("show");
 					break;
 				default:
@@ -302,6 +303,7 @@ function dislike() {
 					break;
 				case 2: // user not logged in
 					$("#tipsMessage").text("用户未登录");
+					$("#tipsbtn").attr("onclick", "logout()");
 					$("#tipsModal").modal("show");
 					break;
 				default:
@@ -345,7 +347,7 @@ function register() {
 					$("#tipsModal").modal("show");
 					break;
 				case 1: // succeed
-					$("#tipsMessage").text("注册成功！");
+					$("#tipsMessage").text("注册成功！请登录");
 					$("#tipsbtn").attr("onclick", "refresh()");
 					$("#tipsModal").modal("show");
 					break;
